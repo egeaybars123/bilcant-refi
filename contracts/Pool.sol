@@ -103,9 +103,15 @@ contract Pool is Ownable {
     
     //returns the value of the tokens in the contract
     //calls Chainlink Price Feeds for price retrieval
-    function getTokenValue(uint index) public view returns (uint) {
-        uint value = (uint(getLatestPrice(index)) * IERC20(tokenAddresses[index]).balanceOf(address(this)) / 10**18);
+    function getTokenValue(uint index) public returns (uint) {
+        address tokenAddr = tokenAddresses[index];
+        uint decimal = IERC20Extended(tokenAddr).decimals();
+        uint value = (uint(getLatestPrice(index)) * IERC20(tokenAddresses[index]).balanceOf(address(this)) / 10**decimal);
         return value;
+    }
+
+    function getDonationList() external view returns(address[] memory) {
+        return donationList;
     }
 
     fallback() external payable {}
