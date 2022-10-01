@@ -28,7 +28,7 @@ interface IERC20Extended {
     function decimals() external returns (uint256);
 }
 
-contract Pool is Ownable {
+contract Pool is Ownable, KeeperCompatible {
 
     AggregatorV3Interface internal priceFeed;
 
@@ -117,42 +117,39 @@ contract Pool is Ownable {
     fallback() external payable {}
     receive() external payable {}
     
-    /*
+    
     function checkUpkeep(bytes calldata checkData) external view override returns (bool upkeepNeeded, bytes memory performData) {
         if (keccak256(checkData) == keccak256(hex'01')) {
-            upkeepNeeded = getTokenValue(0) > 20;
+            upkeepNeeded = IERC20(tokenAddresses[0]).balanceOf(address(this)) > 10000; // 0.1 USDC (BTC for testing purposes)
             performData = checkData; 
         }
         if (keccak256(checkData) == keccak256(hex'02')) {
-            upkeepNeeded = getTokenValue(1) > 20;
+            upkeepNeeded = IERC20(tokenAddresses[1]).balanceOf(address(this)) > 100000000000000000; //0.1 WrappedAVAX
             performData = checkData; 
         }
         if (keccak256(checkData) == keccak256(hex'03')) {
-            upkeepNeeded = getTokenValue(2) > 20;
+            upkeepNeeded = IERC20(tokenAddresses[2]).balanceOf(address(this)) > 20000000000000000000; //20 USDT
             performData = checkData; 
         }          
     }
 
      function performUpkeep(bytes calldata performData) external override {
         if(keccak256(performData) == keccak256(hex'01') && 
-            (getTokenValue(0) > 20))
+            (IERC20(tokenAddresses[0]).balanceOf(address(this)) > 10000))
             {
-            swapTokens(0);
+            swapTokens(0, 10000000);
         }
 
         if(keccak256(performData) == keccak256(hex'02') && 
-            (getTokenValue(1) > 20))
+            (IERC20(tokenAddresses[1]).balanceOf(address(this)) > 100000000000000000))
             {
-            swapTokens(1);
+            swapTokens(1, 10000000);
         }
 
         if(keccak256(performData) == keccak256(hex'02') && 
-            (getTokenValue(2) > 20))
+            (IERC20(tokenAddresses[2]).balanceOf(address(this)) > 20000000000000000000))
             {
-            swapTokens(2);
+            swapTokens(2, 10000000);
         }
     }
-   */ 
-   
-
 }
