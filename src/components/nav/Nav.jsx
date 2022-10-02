@@ -7,7 +7,7 @@ import usdc from '../../assets/usdc.png';
 import avax from '../../assets/avax.png';
 import { useWeb3React } from '@web3-react/core';
 import { injected } from '../connector/injected';
-import { useEffect } from 'react';
+import { useEffect, } from 'react';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 
@@ -27,6 +27,10 @@ const Menu =()=>(
      }catch(ex){
        console.log(ex);
      }
+    }
+    const [background, setBackground] = useState("#fdfdfd");
+    const setStyle =  (background) => {
+      setBackground(background);
     }
 
    async function disconnect() {
@@ -58,8 +62,11 @@ const Menu =()=>(
               if (account) return;
               connect();
               }}
-             type="button">   
+              
+              onMouseOut={()=> setStyle("fdfdfd")}
+             type="button"  onMouseEnter={()=> setStyle("424246")}>   
              {account? "Connected" : "Connect"}{" "}
+             
              </button>
            </div>
            
